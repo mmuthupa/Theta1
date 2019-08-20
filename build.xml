@@ -1,0 +1,47 @@
+<project name="YBL-Jenkins" default="jar">
+      
+  <path id="classpath">
+		<fileset dir="." includes="lib/*.jar"/>		
+  </path>
+  
+  <target name = "compile">
+		 
+	<mkdir dir = "bin"/>
+	<mkdir dir = "bin/build"/>
+	<!--<mkdir dir = "bin/lib"/>
+	
+	<copy todir="bin/lib" >  
+		<fileset dir="lib"/>  
+	</copy>-->
+	
+	<copy todir="bin/build" >
+		<fileset dir="build"/>  
+	</copy>
+
+  </target>
+  
+	<target name="jar" depends="compile">
+	
+        <manifestclasspath property="jar.classpath" jarfile="testScripts.jar">
+          <classpath refid="classpath"/>
+        </manifestclasspath>  
+		
+        <jar destfile="testScripts.jar" basedir="build/classes">
+				<!--<zipgroupfileset dir="bin/lib"/>-->
+				
+            <manifest>
+                <attribute name="Main-Class" value="driverScript.ExecuteTest"/>
+				<attribute name="Class-Path" value="${jar.classpath}"/>
+            </manifest>			
+			
+			<!--<fileset dir=".">
+				<include name="lib/*.jar" />
+			</fileset>-->
+		 </jar>
+    </target>
+
+    <target name="run">
+        <java jar="testScripts.jar" fork="true" classpathref="classpath"/>
+    </target>
+
+</project>
